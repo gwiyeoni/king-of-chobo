@@ -39,5 +39,4 @@ int main(void)
         printf("Yes");
         break;
     }
-    return 0;
 }
