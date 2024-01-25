@@ -20,7 +20,7 @@ int main(void)
         getchar();
         for (int j = 0; j <= strlen(arr)/2; j++)
         {
-            
+           
             if (tolower(arr[j]) != tolower(arr[strlen(arr) - j-1]))
             {
                 printf("No\n");
