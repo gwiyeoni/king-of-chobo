@@ -23,7 +23,7 @@ int main(void)
 				|| java == 1 || arr[i - 1] == '_'
 				|| strchr(arr, ' ') != NULL)
 			{
-				printf("Error!\n");
+				printf("Error!");
 				return 0;
 			}
 			c = 1;
@@ -32,7 +32,7 @@ int main(void)
 		{
 			if (i == 0 || c == 1)
 			{
-				printf("Error!\n");
+				printf("Error!");
 				return 0;
 			}
 
@@ -66,7 +66,5 @@ int main(void)
 	}
 	else
 		printf("%s", arr);
-
-	printf("\n");
 	return 0;
 }
