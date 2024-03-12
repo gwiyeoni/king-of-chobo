@@ -1,52 +1,72 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
+#include <math.h>
+#include <time.h>
 
-int main() {
-    char var[101];
-    scanf("%s", var);
-    
-    int len = strlen(var);
-    int isJava = 0, isC = 0;
-    
-    // 변수명이 C++ 형식인지 Java 형식인지 판별
-    for(int i = 0; i < len; i++) {
-        if(var[i] == '_') {
-            if(i == 0 || i == len-1 || isJava || var[i-1] == '_') { // C++ 형식에 어긋나는 경우
-                printf("Error!\n");
-                return 0;
-            }
-            isC = 1;
-        } else if(isupper(var[i])) {
-            if(i == 0 || isC) { // Java 형식에 어긋나는 경우
-                printf("Error!\n");
-                return 0;
-            }
-            isJava = 1;
-        }
-    }
-    
-    // 변환 과정
-    if(isC) {
-        for(int i = 0; i < len; i++) {
-            if(var[i] == '_') {
-                var[i+1] = toupper(var[i+1]); // 다음 문자 대문자로 변경
-            } else {
-                printf("%c", var[i]);
-            }
-        }
-    } else if(isJava) {
-        for(int i = 0; i < len; i++) {
-            if(isupper(var[i])) {
-                printf("_%c", tolower(var[i])); // 대문자 앞에 _ 추가 후 소문자로 변경
-            } else {
-                printf("%c", var[i]);
-            }
-        }
-    } else { // 이미 C++ 형식이거나, 변환할 필요가 없는 경우
-        printf("%s", var);
-    }
-    
-    printf("\n");
-    return 0;
+int main(void)
+{
+	char arr[101];
+
+
+	scanf("%[^\n]", arr);
+	getchar();
+
+	int c = 0;
+	int java = 0;
+
+	for (int i = 0; i < strlen(arr); i++)
+	{
+		if (arr[i] == '_')
+		{
+			if (i == 0 || i == strlen(arr) - 1
+				|| java == 1 || arr[i - 1] == '_'
+				|| strchr(arr, ' ') != NULL)
+			{
+				printf("Error!\n");
+				return 0;
+			}
+			c = 1;
+		}
+		else if (arr[i] >= 'A' && arr[i] <= 'Z')
+		{
+			if (i == 0 || c == 1)
+			{
+				printf("Error!\n");
+				return 0;
+			}
+
+			java = 1;
+		}
+	}
+
+	if (c == 1)
+	{
+		for (int i = 0; i < strlen(arr); i++)
+		{
+			if (arr[i] == '_')
+			{
+				i++;
+				arr[i] -= 32;
+			}
+			printf("%c", arr[i]);
+		}
+	}
+	else if (java == 1)
+	{
+		for (int i = 0; i < strlen(arr); i++)
+		{
+			if (arr[i] >= 'A' && arr[i] <= 'Z')
+			{
+				printf("_%c", arr[i] + 32);
+			}
+			else
+				printf("%c", arr[i]);
+		}
+	}
+	else
+		printf("%s", arr);
+
+	printf("\n");
+	return 0;
 }
