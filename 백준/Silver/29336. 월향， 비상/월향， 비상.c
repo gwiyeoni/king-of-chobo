@@ -27,7 +27,7 @@ int main()
     qsort(A, n, sizeof(long long int), compare);
 
 
-    long long int t;
+    int t;
     long long int q;
     long long int past = 0, j = 0;
     long long int remain = n;
@@ -35,7 +35,7 @@ int main()
     long long int used_A = 0;
     for (int i = 0; i < m; i++)
     {
-        scanf("%lld %lld", &t, &q);
+        scanf("%d %lld", &t, &q);
 
         increase += (t - past); // 증가한 시간
 
@@ -48,11 +48,6 @@ int main()
         while (q > used_A) // 조건 맞출 때 까지
         {
             used_A += A[j++] + increase; //누적역량 += 새 역량 + 증가한 시간
-            //if (j >= n)
-            //{
-            //    printf("-1");
-            //    return 0;
-            //}
         }
 
         sum += remain * (t - past); //최종역량 += 남은 운영진 수 * 일 수 증가
