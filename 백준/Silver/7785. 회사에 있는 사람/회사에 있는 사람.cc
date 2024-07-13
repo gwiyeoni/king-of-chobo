@@ -4,7 +4,7 @@
 #include <numeric>
 #include<string>
 #include<cmath>
-#include<map>
+#include<unordered_map>
 #include<utility>
 
 using namespace std;
@@ -15,7 +15,7 @@ int main()
     ios::sync_with_stdio(false);
     cin.tie(NULL);
 
-    map<string, string, greater<string>> m;
+    unordered_map<string, bool> m;
 
     int n;
     string name, state;
@@ -25,13 +25,22 @@ int main()
     {
         cin >> name >> state;
         if (state == "enter")
-            m.insert({ name, state });
+            m[name] = true;
         else
-            m.erase(name);
+            m[name] = false;
     }
 
-    for (auto it : m)
+    vector<string> v;
+    for (const auto& it : m)
     {
-        cout << it.first << "\n";
+        if (it.second)
+            v.push_back(it.first);
+    }
+
+    sort(v.begin(), v.end(), greater<string>());
+
+    for (const auto& it : v)
+    {
+        cout << it << '\n';
     }
 }
