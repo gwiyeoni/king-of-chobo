@@ -50,7 +50,6 @@ int main()
 
     while (!tomato.empty())
     {
-        int n = tomato.size();
         tie(x, y, z, level) = tomato.front();
         tomato.pop();
 
