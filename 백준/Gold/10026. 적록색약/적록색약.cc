@@ -85,13 +85,7 @@ int main()
                 dfs(i, j, N, grid[i][j]);
                 color++;
             }
-        }
-    }
 
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
             if (!visited2[i][j])
             {
                 visited2[i][j] = true;
