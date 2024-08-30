@@ -4,6 +4,10 @@ using namespace std;
 
 typedef long long ll;
 typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef tuple<int, int, int> tiii;
+
+#define INF (int)1e9
 
 class Graph
 {
@@ -11,8 +15,10 @@ public:
     int n, m, t;
     int s, g, h;
     int a, b, d;
+    int x;
     vector<vector<pii>> maps;
     vector<int> T;
+    set<int> result;
 
 public:
     Graph()
@@ -31,41 +37,44 @@ public:
             maps[b].emplace_back(a, d);
         }
 
-        T.resize(t);
         for (int i = 0; i < t; i++)
         {
-            cin >> T[i];
+            cin >> x;
+            T.push_back(x);
         }
     }
+
 };
+
 
 vector<int> Dijkstra(Graph& graph, int start)
 {
-    vector<int> dist(graph.n + 1, INT_MAX);
-    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    vector<int> dist(graph.n + 1, INF);
+    priority_queue <pii, vector<pii>, greater<pii>> pq;
 
-    dist[start] = 0;
+    dist[start] = { 0 };
     pq.push({ 0, start });
 
     while (!pq.empty())
     {
-        auto [cost, curr] = pq.top();
+        auto [cost, start] = pq.top();
         pq.pop();
 
-        if (dist[curr] < cost) continue;
-        for (const auto& edge : graph.maps[curr])
+        if (dist[start] < cost) continue;
+        for (const auto& edge : graph.maps[start])
         {
-            auto [next, weight] = edge;
-            if (dist[next] > cost + weight)
+            auto [end, weight] = edge;
+            if (dist[end] > cost + weight)
             {
-                dist[next] = cost + weight;
-                pq.push({ dist[next], next });
+                dist[end] = cost + weight;
+                pq.push({ dist[end], end });
             }
         }
     }
 
     return dist;
 }
+
 
 int main()
 {
@@ -84,24 +93,20 @@ int main()
         vector<int> dist_g = Dijkstra(graph, graph.g);
         vector<int> dist_h = Dijkstra(graph, graph.h);
 
-        vector<int> result;
-
         for (const auto& i : graph.T)
         {
             if ((dist_s[i] == dist_s[graph.h] + dist_g[i] + dist_g[graph.h])
                 || dist_s[i] == dist_s[graph.g] + dist_h[i] + dist_g[graph.h])
             {
-                result.push_back(i);
+                graph.result.insert(i);
             }
         }
 
-        sort(result.begin(), result.end());
-        for (const auto& i : result)
+        for (const auto& i : graph.result)
         {
             cout << i << " ";
         }
         cout << "\n";
     }
 
-    return 0;
 }
