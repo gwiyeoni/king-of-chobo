@@ -25,7 +25,7 @@ int main()
     sort(solution.begin(), solution.end());
 
     ll left = 0, mid, right = N - 1, sum = 0, min_sum = LONG_MAX;
-    tuple<ll,ll,ll> result = { 0,0,0 };
+    tuple result = { 0,0,0 };
     while (left < N - 2)
     {
         mid = left + 1, right = N - 1;
