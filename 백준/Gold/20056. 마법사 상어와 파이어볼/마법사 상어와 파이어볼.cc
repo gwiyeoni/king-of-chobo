@@ -14,6 +14,16 @@ typedef struct Fireball
     int m;
     int s;
     int d;
+
+    bool operator>(const Fireball& other) const
+    {
+        if (this->x != other.x)
+            return this->x > other.x;
+        if (this->y != other.y)
+            return this->y > other.y;
+        return false;
+    }
+
 }fireball;
 
 int main()
@@ -24,13 +34,14 @@ int main()
     int N, M, K;
     cin >> N >> M >> K;
 
-    vector<fireball> fire;
+    vector<fireball> maps;
+    priority_queue<fireball, vector<fireball>, greater<fireball>> maps_temp;
 
     int r, c, m, d, s;
     for (int i = 0; i < M; i++)
     {
         cin >> r >> c >> m >> s >> d;
-        fire.push_back({ r - 1, c - 1, m, s, d });
+        maps.push_back({ r - 1, c - 1, m, s, d });
     }
 
     int dx[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
@@ -38,8 +49,7 @@ int main()
 
     while (K--)
     {
-        map<pii, vector<fireball>> fire_map;
-        for (auto& [x, y, m, s, d] : fire)
+        for (auto& [x, y, m, s, d] : maps)
         {
             x = (x + (dx[d] * s)) % N;
             y = (y + (dy[d] * s)) % N;
@@ -49,54 +59,69 @@ int main()
             if (y < 0)
                 y += N;
 
-            fire_map[{x, y}].push_back({ x, y, m, s, d });
+            maps_temp.push({ x, y, m, s, d });
         }
 
-        fire.clear();
+        maps.clear();
 
-        for (auto& [pos, f] : fire_map)
+        while (!maps_temp.empty())
         {
-            if (f.size() == 1)
-            {
-                fire.push_back(f[0]);
-                continue;
-            }
+            auto [x, y, m, s, d] = maps_temp.top();
+            maps_temp.pop();
 
-            int sum_m = 0, sum_s = 0;
-            int count_s = f.size();
+            int sum_m = m, sum_s = s;
             int odd = 0, even = 0;
-            for (const auto& [x, y, m, s, d] : f)
-            {
-                sum_m += m;
-                sum_s += s;
+            if (d % 2 == 0)
+                even++;
+            else
+                odd++;
 
-                if (d % 2 == 0)
+            int count_s = 1;
+            bool is_add = false;
+            while (!maps_temp.empty())
+            {
+                auto [x_, y_, m_, s_, d_] = maps_temp.top();
+                if (x != x_ || y != y_) break;
+                maps_temp.pop();
+                is_add = true;
+
+                sum_m += m_;
+                sum_s += s_;
+                count_s++;
+
+                if (d_ % 2 == 0)
                     even++;
                 else
                     odd++;
             }
 
-            if (sum_m / 5 == 0) continue;
-
-            if (!even || !odd)
+            if (is_add)
             {
-                for (int i = 0; i < 8; i += 2)
-                    fire.push_back({ pos.first, pos.second, sum_m / 5, sum_s / count_s, i });
+                if (sum_m / 5 == 0) continue;
+
+                if (!even || !odd)
+                {
+                    for (int i = 0; i < 8; i += 2)
+                        maps.push_back({ x, y, sum_m / 5, sum_s / count_s, i });
+                }
+                else
+                {
+                    for (int i = 1; i < 8; i += 2)
+                        maps.push_back({ x, y, sum_m / 5, sum_s / count_s, i });
+                }
             }
             else
-            {
-                for (int i = 1; i < 8; i += 2)
-                    fire.push_back({ pos.first, pos.second, sum_m / 5, sum_s / count_s, i });
-            }
-
+                maps.push_back({ x, y, m, s, d });
         }
     }
 
-    int result = 0;
-    for (const auto& i : fire)
+
+    int sum = 0;
+    for (const auto& [x, y, m, s, d] : maps)
     {
-        result += i.m;
+        sum += m;
     }
 
-    cout << result << "\n";
+    cout << sum << "\n";
 }
+
