@@ -65,15 +65,13 @@ int main() {
             if (E_len >= A_len)
             {
                 is_found = true;
-                E_len = 0;
                 for (int i = 0; i < A_len; i++)
                 {
-                    if (A[i] != end[E_len])
+                    if (A[i] != end[i])
                     {
                         is_found = false;
                         break;
                     }
-                    E_len++;
                 }
 
                 if (is_found)
