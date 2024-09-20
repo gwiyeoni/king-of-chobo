@@ -17,7 +17,7 @@ void dfs(ll n)
     {
         return;
     }
-    if (n >= A && n <= B)
+    if (n >= A)
     {
         result++;
     }
